@@ -483,7 +483,7 @@ class SimpleModel(ModelBase):
 
         if not retval.is_default(retval):
             retval.__extends__ = cls
-            retval.__type_name__ = kwargs.get("type_name", ModelBase.Empty)
+            retval.__type_name__ = kwargs.get("type_name", cls.__type_name__)
 
         retval.resolve_namespace(retval, kwargs.get('__namespace__'))
 

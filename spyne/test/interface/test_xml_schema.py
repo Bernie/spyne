@@ -338,6 +338,10 @@ class TestParseOwnXmlSchema(unittest.TestCase):
         assert NewGuy._type_info['name'].Attributes.pattern == "a"
         assert NewGuy._type_info['name'].Attributes.default == "aa"
 
+    def test_type_name_perserved_on_customized_primitives(self):
+      test1 = Unicode(max_len=32)
+      assert test1.get_type_name() == Unicode.get_type_name()
+
     def test_boolean_default(self):
         tns = 'some_ns'
         class SomeGuy(ComplexModel):
