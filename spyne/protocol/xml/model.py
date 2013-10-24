@@ -281,6 +281,17 @@ def complex_to_parent_element(prot, cls, value, tns, parent_elt, name=None):
     inst = cls.get_serialization_instance(value)
     return get_members_etree(prot, cls, inst, element)
 
+def _get_key_from_type_info_alt(type_info_alt, key, ao=None):
+    mkpairs = cls._type_info_alt.get(key, [(None, key)])
+    if len(mkpairs) > 1:
+        for _member, _key in mkpairs:
+            if isinstance(_member, XmlAttribute) and _member.attribute_of == ao:
+                return _member, _key
+        else:
+            return None, key
+    else:
+        return mkpairs[0]
+    
 
 @nillable_element
 def complex_from_element(prot, cls, element):
@@ -307,18 +318,9 @@ def complex_from_element(prot, cls, element):
 
         member = flat_type_info.get(key, None)
         if member is None:
-            mkpairs = cls._type_info_alt.get(key, [(None, key)])
-            if len(mkpairs) > 1:
-                for _member, _key in mkpairs:
-                    if isinstance(_member, XmlAttribute) and _member.attribute_of == key:
-                        member, key = _member, _key
-                        break
-                else:
-                    continue
-            else:
-                member, key = mkpairs[0]
+            member, key = _get_key_from_type_info_alt(cls._type_info_alt, key)
             if member is None:
-                member, key = cls._type_info_alt.get(c.tag, (None, key))
+                member, key = _get_key_from_type_info_alt(cls._type_info_alt, c.tag)
                 if member is None:
                     continue
 
@@ -338,7 +340,7 @@ def complex_from_element(prot, cls, element):
         for key, value_str in c.attrib.items():
             member = flat_type_info.get(key, None)
             if member is None:
-                member, key = cls._type_info_alt.get(key, (None, key))
+                member, key = _get_key_from_type_info_alt(cls._type_info_alt, key, c.tag)
                 if member is None:
                     continue
 
