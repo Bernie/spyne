@@ -117,3 +117,10 @@ class odict(object):
     def append(self, t):
         k, v = t
         self[k] = v
+
+    def setdefault(self, key, value):
+        if key in self:
+            return self[key]
+        else:
+            self[key] = value
+            return value
