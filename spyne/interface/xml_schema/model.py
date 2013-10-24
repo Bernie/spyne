@@ -236,7 +236,7 @@ def complex_add(document, cls, tags):
             _ext.attrib['base'] = elt.attrib['type']
             del elt.attrib['type']
         else:
-            _exts = elt.xpath('//xsd:complexType/xsd:simpleContent/xsd:extension', namespaces={'xsd': _ns_xsd})
+            _exts = elt.xpath('//xsd:element[@name=\'%s\']/xsd:complexType/xsd:simpleContent/xsd:extension' % ao, namespaces={'xsd': _ns_xsd})
             if _exts:
                 _ext = _exts[0]
             else:
