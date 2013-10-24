@@ -282,7 +282,7 @@ def complex_to_parent_element(prot, cls, value, tns, parent_elt, name=None):
     return get_members_etree(prot, cls, inst, element)
 
 def _get_key_from_type_info_alt(type_info_alt, key, ao=None):
-    mkpairs = cls._type_info_alt.get(key, [(None, key)])
+    mkpairs = type_info_alt.get(key, [(None, key)])
     if len(mkpairs) > 1:
         for _member, _key in mkpairs:
             if isinstance(_member, XmlAttribute) and _member.attribute_of == ao:
