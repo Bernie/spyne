@@ -265,12 +265,12 @@ def get_members_etree(prot, cls, inst, parent):
         if cls._type_info[a_of].Attributes.max_occurs > 1:
             for subsubvalue, attr_parent in zip(subvalue, attr_parents):
                 prot.to_parent_element(v, subsubvalue, v.get_namespace(),
-                                                                attr_parent, k)
+                                                                attr_parent, sub_name)
 
         else:
             for attr_parent in attr_parents:
                 prot.to_parent_element(v, subvalue, v.get_namespace(),
-                                                                attr_parent, k)
+                                                                attr_parent, sub_name)
 
 
 @nillable_value
