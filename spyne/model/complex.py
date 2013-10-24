@@ -333,7 +333,8 @@ class ComplexModelMeta(type(ModelBase)):
         _type_info_alt = cls_dict['_type_info_alt'] = TypeInfo()
         for b in cls_bases:
             if hasattr(b, '_type_info_alt'):
-                _type_info_alt.update(b._type_info_alt)
+                for sn, sublist in b.type_info_alt.items():
+                    _type_info_alt.setdefault(sn, []).extend(subdict)
 
         # make sure _type_info contents are sane
         for k, v in _type_info.items():
@@ -365,21 +366,22 @@ class ComplexModelMeta(type(ModelBase)):
                 if key in _type_info:
                     raise Exception("%r is already defined: %r" %
                                                         (key, _type_info[key]))
-                _type_info_alt[key] = v, k
+                _type_info_alt.setdefault(key, []).append((v, k))
 
             elif sub_ns is None:
                 key = sub_name
                 if sub_ns in _type_info:
                     raise Exception("%r is already defined: %r" %
                                                         (key, _type_info[key]))
-                _type_info_alt[key] = v, k
+                _type_info_alt.setdefault(key, []).append((v, k))
+
 
             elif sub_name is None:
                 key = "{%s}%s" % (sub_ns, k)
                 if key in _type_info:
                     raise Exception("%r is already defined: %r" %
                                                         (key, _type_info[key]))
-                _type_info_alt[key] = v, k
+                _type_info_alt.setdefault(key, []).append((v, k))
 
         # Initialize Attributes
         attrs = cls_dict.get('Attributes', None)

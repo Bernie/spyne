@@ -307,7 +307,16 @@ def complex_from_element(prot, cls, element):
 
         member = flat_type_info.get(key, None)
         if member is None:
-            member, key = cls._type_info_alt.get(key, (None, key))
+            mkpairs = cls._type_info_alt.get(key, [(None, key)])
+            if len(mkpairs) > 1:
+                for _member, _key in mkpairs:
+                    if isinstance(_member, XmlAttribute) and _member.attribute_of == key:
+                        member, key = _member, _key
+                        break
+                else:
+                    continue
+            else:
+                member, key = mkpairs[0]
             if member is None:
                 member, key = cls._type_info_alt.get(c.tag, (None, key))
                 if member is None:
