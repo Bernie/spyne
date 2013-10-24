@@ -333,7 +333,7 @@ class ComplexModelMeta(type(ModelBase)):
         _type_info_alt = cls_dict['_type_info_alt'] = TypeInfo()
         for b in cls_bases:
             if hasattr(b, '_type_info_alt'):
-                for sn, sublist in b.type_info_alt.items():
+                for sn, sublist in b._type_info_alt.items():
                     _type_info_alt.setdefault(sn, []).extend(subdict)
 
         # make sure _type_info contents are sane
