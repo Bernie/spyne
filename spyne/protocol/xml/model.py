@@ -285,7 +285,7 @@ def _get_key_from_type_info_alt(type_info_alt, key, ao=None):
     mkpairs = type_info_alt.get(key, [(None, key)])
     if len(mkpairs) > 1:
         for _member, _key in mkpairs:
-            if isinstance(_member, XmlAttribute) and _member.attribute_of == ao:
+            if issubclass(_member, XmlAttribute) and _member.attribute_of == ao:
                 return _member, _key
         else:
             return None, key
@@ -313,7 +313,7 @@ def complex_from_element(prot, cls, element):
 
     # parse input to set incoming data to related attributes.
     for c in element:
-        key = c.tag.split('}')[-1]
+        key = tag = c.tag.split('}')[-1]
         frequencies[key] += 1
 
         member = flat_type_info.get(key, None)
@@ -340,7 +340,7 @@ def complex_from_element(prot, cls, element):
         for key, value_str in c.attrib.items():
             member = flat_type_info.get(key, None)
             if member is None:
-                member, key = _get_key_from_type_info_alt(cls._type_info_alt, key, c.tag)
+                member, key = _get_key_from_type_info_alt(cls._type_info_alt, key, tag)
                 if member is None:
                     continue
 
@@ -363,7 +363,7 @@ def complex_from_element(prot, cls, element):
     for key, value_str in element.attrib.items():
         member = flat_type_info.get(key, None)
         if member is None:
-            member, key = cls._type_info_alt.get(key, (None, key))
+            member, key = _get_key_from_type_info_alt(cls._type_info_alt, key)
             if member is None:
                 continue
 
