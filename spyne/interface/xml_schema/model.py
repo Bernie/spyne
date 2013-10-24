@@ -211,6 +211,8 @@ def complex_add(document, cls, tags):
 
     for k,v in deferred:
         ao = v.attribute_of
+        if v.Attributes.sub_name is not None:
+            k = v.Attributes.sub_name
         if ao is None: # others will be added at a later loop
             attribute = etree.SubElement(complex_type,'{%s}attribute' % _ns_xsd)
             xml_attribute_add(v, k, attribute, document)
