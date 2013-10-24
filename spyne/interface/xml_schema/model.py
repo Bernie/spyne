@@ -229,11 +229,18 @@ def complex_add(document, cls, tags):
         else:
             elt = elts[0]
 
-        _ct = etree.SubElement(elt, '{%s}complexType' % _ns_xsd)
-        _sc = etree.SubElement(_ct, '{%s}simpleContent' % _ns_xsd)
-        _ext = etree.SubElement(_sc, '{%s}extension' % _ns_xsd)
-        _ext.attrib['base'] = elt.attrib['type']
-        del elt.attrib['type']
+        if 'type' in elt.attrib:
+            _ct = etree.SubElement(elt, '{%s}complexType' % _ns_xsd)
+            _sc = etree.SubElement(_ct, '{%s}simpleContent' % _ns_xsd)
+            _ext = etree.SubElement(_sc, '{%s}extension' % _ns_xsd)
+            _ext.attrib['base'] = elt.attrib['type']
+            del elt.attrib['type']
+        else:
+            _exts = elt.xpath('//xsd:complexType/xsd:simpleContent/xsd:extension', namespaces={'xsd': _ns_xsd})
+            if _exts:
+                _ext = _exts[0]
+            else:
+                raise ValueError('\'//xsd:complexType/xsd:simpleContent/xsd:extension\' not found and element type is already missing.')
 
         attribute = etree.SubElement(_ext, '{%s}attribute' % _ns_xsd)
         xml_attribute_add(v, k, attribute, document)
