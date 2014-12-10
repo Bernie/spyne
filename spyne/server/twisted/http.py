@@ -228,6 +228,7 @@ class TwistedWebResource(Resource):
                                  self.http_transport.app.out_protocol.mime_type)
         initial_ctx.in_string = [request.content.read()]
 	request.content.seek(0)
+        logger.debug('___begin_soap_msg___\n%s\n___end_soap_msg___', initial_ctx.in_string[0])
 
         contexts = self.http_transport.generate_contexts(initial_ctx)
         p_ctx, others = contexts[0], contexts[1:]
